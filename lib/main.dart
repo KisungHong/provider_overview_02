@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:provider_overview_02/models/babies.dart';
 
 import 'package:provider_overview_02/models/dog.dart';
 
@@ -13,10 +14,22 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<Dog>(
-      create: (context) => Dog(name: 'dog05', breed: 'breed05', age: 3),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<Dog>(
+          create: (context) => Dog(name: 'dog06', breed: 'breed06', age: 3),
+        ),
+        FutureProvider<int>(
+          initialData: 0,
+          create: (context) {
+            final int dogAge = context.read<Dog>().age;
+            final babies = Babies(age: dogAge);
+            return babies.getBabies();
+          },
+        )
+      ],
       child: MaterialApp(
-        title: 'Provider 05',
+        title: 'Provider 06',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           primarySwatch: Colors.blue,
@@ -39,7 +52,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Provider 05'),
+        title: Text('Provider 06'),
       ),
       body: Center(
         child: Column(
@@ -94,6 +107,13 @@ class Age extends StatelessWidget {
       children: [
         Text(
           '- age: ${context.select<Dog, int>((Dog dog) => dog.age)}',
+          style: TextStyle(fontSize: 20.0),
+        ),
+        SizedBox(
+          height: 10.0,
+        ),
+        Text(
+          '- number of babies: ${context.watch<int>()}',
           style: TextStyle(fontSize: 20.0),
         ),
         SizedBox(
