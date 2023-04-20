@@ -1,5 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-class Dog {
+import 'package:flutter/material.dart';
+
+class Dog with ChangeNotifier {
   final String name;
   final String breed;
   int age;
@@ -11,6 +13,7 @@ class Dog {
 
   void grow() {
     age++;
+    notifyListeners();
     print('age: $age');
   }
 }
